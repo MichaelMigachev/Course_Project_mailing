@@ -9,6 +9,8 @@ packages = [{include = "course_project_mailing"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "^5.2"
+psycopg2-binary = "^2.9.10"
+python-dotenv = "^1.1.0"
 
 
 [build-system]
