@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class User(models.Model):
+class Client(models.Model):
     full_name = models.CharField(max_length=100, verbose_name='Ф.И.О.', help_text='Введите получателя')
     email = models.EmailField(max_length=100, verbose_name='Email ', help_text='Введите Email', unique=True)
     comment = models.TextField(max_length=250, verbose_name='комментарий', help_text='Введите комментарий')
@@ -40,7 +40,7 @@ class Mailing(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Создана')
     # Статус строка: 'Завершена','Создана','Запущена'
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
-    recipients = models.ManyToManyField(User)
+    recipients = models.ManyToManyField(Client)
 
     def __str__(self):
         return f"{self.message.subject} - {self.status}"

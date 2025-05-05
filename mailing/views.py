@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from mailing.models import User, Message, Mailing, SendAttempt
+from mailing.models import Client, Message, Mailing, SendAttempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 
 
@@ -13,46 +13,53 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 class HomeView(TemplateView):
     template_name = 'mailing/home.html'
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['total_mailings'] = NewsLetter.objects.count()
-    #     context['active_mailings'] = NewsLetter.objects.filter(status='Запущена').count()
-    #     context['unique_recipients'] = User.objects.count()
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Общее количество рассылок
+        context['total_mailings'] = Mailing.objects.count()
+
+        # Количество активных рассылок (со статусом 'Запущена')
+        context['active_mailings'] = Mailing.objects.filter(status='Запущена').count()
+
+        # Количество уникальных клиентов
+        context['unique_clients'] = Client.objects.distinct().count()
+
+        return context
 
 
-# CRUD для получателей (User)
-class UserListView(ListView):
-    model = User
-    template_name = 'user_list.html'
-    context_object_name = 'users'
+# CRUD для получателей (Client)
+class ClientListView(ListView):
+    model = Client
+    template_name = 'client_list.html'
+    context_object_name = 'clients'
 
 
-class UserDetailView(DetailView):
-    model = User
-    template_name = 'mailing/user_detail.html'
-    context_object_name = 'user'
+class ClientDetailView(DetailView):
+    model = Client
+    template_name = 'mailing/client_detail.html'
+    context_object_name = 'client'
 
 
-class UserCreateView(CreateView):
-    model = User
+class ClientCreateView(CreateView):
+    model = Client
     fields = ('full_name', 'email', 'comment')
-    # template_name = 'user_form.html'
-    success_url = reverse_lazy('mailing:user_list')
+    # template_name = 'client_form.html'
+    success_url = reverse_lazy('mailing:client_list')
 
 
-class UserUpdateView(UpdateView):
-    model = User
+class ClientUpdateView(UpdateView):
+    model = Client
     fields = ('full_name', 'email', 'comment')
-    template_name = 'mailing/user_form.html'
-    success_url = reverse_lazy('mailing:user_list')
+    template_name = 'mailing/client_form.html'
+    success_url = reverse_lazy('mailing:client_list')
 
 
-class UserDeleteView(DeleteView):
-    model = User
-    context_object_name = 'user'
-    template_name = 'mailing/user_confirm_delete.html'
-    success_url = reverse_lazy('mailing:user_list')
+class ClientDeleteView(DeleteView):
+    model = Client
+    context_object_name = 'client'
+    template_name = 'mailing/client_confirm_delete.html'
+    success_url = reverse_lazy('mailing:client_list')
 
 
 # CRUD для сообщений (Message)

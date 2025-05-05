@@ -19,9 +19,9 @@
             <td>{{ message.topic }}</td>
             <td>{{ message.letter | truncatechars:30 }}</td>
             <td>
-                <a href="{% url 'mailing:messages_detail' user.pk %}" class="btn btn-success">Посмотреть</a>
-                <a href="{% url 'mailing:messages_update' user.pk %}" class="btn btn-warning">Редактировать</a>
-                <a href="{% url 'mailing:messages_delete' user.pk %}" class="btn btn-danger">Удалить</a>
+                <a href="{% url 'mailing:messages_detail' message.pk %}" class="btn btn-success">Посмотреть</a>
+                <a href="{% url 'mailing:messages_update' message.pk %}" class="btn btn-warning">Редактировать</a>
+                <a href="{% url 'mailing:messages_delete' message.pk %}" class="btn btn-danger">Удалить</a>
             </td>
         </tr>
         {% endfor %}

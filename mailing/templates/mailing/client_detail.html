@@ -9,17 +9,17 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <p class="card-text">Информация о получателе:</p>
-                        <li>Полное имя: {{ user.full_name }}</li>
-                        <li>Почта: {{ user.email }}</li>
-                        <li>Коментарий: {{ user.comment }}</li>
+                        <li>Полное имя: {{ client.full_name }}</li>
+                        <li>Почта: {{ client.email }}</li>
+                        <li>Коментарий: {{ client.comment }}</li>
                         <p></p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <a class="btn btn-primary rounded me-5"
-                                   href="{% url 'mailing:user_update' user.pk %}"
+                                   href="{% url 'mailing:client_update' client.pk %}"
                                    role="button">Редактировать</a>
                                 <a class="btn btn-primary rounded"
-                                   href="{% url 'mailing:user_list' %}"
+                                   href="{% url 'mailing:client_list' %}"
                                    role="button">Назад</a>
                             </div>
                         </div>
