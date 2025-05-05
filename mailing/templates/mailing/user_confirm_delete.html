@@ -1,0 +1,19 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Удаление{% endblock %}
+
+{% block content %}
+<div class="row text-center">
+    <h1>Удалить</h1>
+</div>
+<div class="container">
+    <p class="card-text">Действительно ходите удалить: {{user.full_name}}</p>
+    <form method="post" action="" class="form-floating" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">
+                Удалить
+        </button>
+        <a class="btn btn-primary" href="{% url 'mailing:user_list' %}" role="button">Отменить</a>
+    </form>
+</div>
+{% endblock %}
