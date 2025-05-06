@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'mailing',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -107,3 +108,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Путь к директории на диске
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# кастомная модель пользователя
+AUTH_USER_MODEL = 'users.User'
+
