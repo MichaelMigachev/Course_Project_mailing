@@ -179,11 +179,14 @@
         <div class="row py-lg-1">
             <div class="col-lg-6 col-md-8 mx-auto">
                 <h1 class="fw-light">Cервис управления рассылками</h1>
+                {% if not user.is_authenticated %}
                 <p class="lead text-body-secondary">Добро пожаловать!</p>
+                <p class="lead text-body-secondary">Для использования сервиса авторизуйтесь или зарегистрируйтесь!</p>
                 <p>
-                    <a href="#" class="btn btn-primary my-2">Main call to action</a>
-                    <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+                    <a href="{% url 'users:login' %}" class="btn btn-primary my-2">Войти</a>
+                    <a href="{% url 'users:register' %}" class="btn btn-secondary my-2">Зарегистрироваться</a>
                 </p>
+                {% endif %}
             </div>
         </div>
     </section>

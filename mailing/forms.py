@@ -29,7 +29,7 @@ class ClientForm(StyleFormMixIn, forms.ModelForm):
         email = self.cleaned_data.get('email')
         if not email:
             raise ValidationError("Пожалуйста, введите email.")
-        # Можно добавить проверку на корректность email, например:
+        # проверка на корректность email, например:
         from django.core.validators import validate_email
         try:
             validate_email(email)
@@ -39,7 +39,7 @@ class ClientForm(StyleFormMixIn, forms.ModelForm):
 
     def clean_comment(self):
         comment = self.cleaned_data.get('comment')
-        # Например, ограничение по длине комментария
+        # ограничение по длине комментария
         if comment and len(comment) > 150:
             raise ValidationError("Комментарий не должен превышать 150 символов.")
         return comment

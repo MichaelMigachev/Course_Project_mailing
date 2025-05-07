@@ -1,6 +1,7 @@
 from django.db import models
 
 
+# Модель получателей рассылки
 class Client(models.Model):
     full_name = models.CharField(max_length=100, verbose_name='Ф.И.О.', help_text='Введите получателя')
     email = models.EmailField(max_length=100, verbose_name='Email ', help_text='Введите Email', unique=True)
@@ -15,6 +16,8 @@ class Client(models.Model):
         verbose_name_plural = 'получатели'
         ordering = ['full_name']
 
+
+# Модель письма
 class Message(models.Model):
     topic = models.TextField(max_length=100, verbose_name='тема', help_text='Введите тему') # тема письма
     letter = models.TextField(verbose_name='сообщение', help_text='Введите сообщение')      # тело письма
@@ -28,6 +31,7 @@ class Message(models.Model):
         ordering = ['topic']
 
 
+# Модель рассылки
 class Mailing(models.Model):
     STATUS_CHOICES = [
         ('Создана', 'Создана'),
@@ -51,6 +55,7 @@ class Mailing(models.Model):
         ordering = ['status']
 
 
+# Модель попыток отправки
 class SendAttempt(models.Model):
     STATUS_CHOICES = [
         ('Успешно', 'Успешно'),
