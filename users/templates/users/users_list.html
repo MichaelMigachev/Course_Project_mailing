@@ -1,0 +1,28 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Список пользователей{% endblock %}
+
+{% block content %}
+ <div class="header mx-auto text-center">
+        <h2 class="display-4">{{ title }}</h2>
+    </div>
+    <div class="col-12">
+        <div class="row mb-3">
+            {% for object in object_list %}
+                <div class="col-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="my-0 font-weight-normal mb-3">Пользователь: {{ object.email }}</h4>
+                            {% if not object.is_active %}
+                                <p>Заблокирован</p>
+                            {% else %}
+                                <p>Активный</p>
+                            {% endif %}
+                            <a class="p-2 btn btn-outline-primary" href="{% url 'users:update' object.pk %}">Редактировать</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

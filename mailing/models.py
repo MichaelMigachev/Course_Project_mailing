@@ -1,5 +1,6 @@
 from django.db import models
 
+from users.models import User
 
 # Модель получателей рассылки
 class Client(models.Model):
@@ -7,6 +8,7 @@ class Client(models.Model):
     email = models.EmailField(max_length=100, verbose_name='Email ', help_text='Введите Email', unique=True)
     comment = models.TextField(max_length=250, verbose_name='комментарий', help_text='Введите комментарий')
 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='чей клиент')
 
     def __str__(self):
         return f'{self.email}'
@@ -21,6 +23,8 @@ class Client(models.Model):
 class Message(models.Model):
     topic = models.TextField(max_length=100, verbose_name='тема', help_text='Введите тему') # тема письма
     letter = models.TextField(verbose_name='сообщение', help_text='Введите сообщение')      # тело письма
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Владелец сообщения')
 
     def __str__(self):
         return f'{self.topic}'
@@ -46,6 +50,10 @@ class Mailing(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     recipients = models.ManyToManyField(Client)
 
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name='Владелец рассылки')
+    is_activated = models.BooleanField(default=True, verbose_name='действующая')
+
+
     def __str__(self):
         return f"{self.message.topic} - {self.status}"
 
@@ -53,6 +61,10 @@ class Mailing(models.Model):
         verbose_name = 'Расссылка'
         verbose_name_plural = 'Рассылки'
         ordering = ['status']
+
+        permissions = [
+            ('set_is_activated', 'Может отключать рассылку'),
+        ]
 
 
 # Модель попыток отправки

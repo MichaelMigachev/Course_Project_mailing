@@ -15,6 +15,7 @@
 	                        <button type="submit" class="btn btn-link nav-link"><u>Выйти</u>
 	                        </button>
                      </form>
+                    <li><a href="{% url 'users:users_list' %}" class="text-white">Список пользователей сервиса</a></li>
                     {% else %}
                     <li><a href="{% url 'users:login' %}" class="text-white">Вход</a></li>
                     <li><a href="{% url 'users:register' %}" class="text-white">Регистрация</a></li>

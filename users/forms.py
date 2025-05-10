@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,  UserChangeForm
 from django.core.exceptions import ValidationError
 # from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
@@ -23,3 +23,15 @@ class UserRegisterForm(StyleFormMixIn, UserCreationForm):
                   raise ValidationError("Пользователь с таким email уже существует.")
 
             return email.lower()  # Приводим к нижнему регистру
+
+# Модератор изменяет статус активности пользователя
+class ModeratorForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = ('is_active',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['password'].widget = forms.HiddenInput()
+
