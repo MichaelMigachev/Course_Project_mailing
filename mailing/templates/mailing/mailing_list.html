@@ -9,6 +9,7 @@
     <thead>
         <tr>
             <th>Сообщение</th>
+            <th>Владелец</th>
             <th>Статус</th>
             <th>Действия</th>
         </tr>
@@ -17,6 +18,7 @@
         {% for mailing in mailings  %}
         <tr>
             <td>{{ mailing.message  }}</td>
+            <td>{{ mailing.owner }}</td>
             <td>{{ mailing.status }}</td>
             <td>
                 <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-success">Посмотреть</a>

@@ -45,6 +45,9 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
     # template_name = 'client_form.html'
     success_url = reverse_lazy('mailing:client_list')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user  # Автоматическое назначение владельца
+        return super().form_valid(form)
 
 class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
@@ -73,12 +76,27 @@ class MessageCreateView(LoginRequiredMixin, CreateView):
     template_name = 'mailing/message_form.html'
     success_url = reverse_lazy('mailing:messages_list')
 
+    def form_valid(self, form):
+        """Автоматически назначаем текущего пользователя как владельца сообщения"""
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
 
 class MessageUpdateView(LoginRequiredMixin, UpdateView):
     model = Message
     form_class = MessageForm
     template_name = 'mailing/message_form.html'
     success_url = reverse_lazy('mailing:messages_list')
+
+    def get_form_kwargs(self):
+        """Передаем текущего пользователя в форму"""
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_queryset(self):
+        """Ограничиваем выборку только своими рассылками"""
+        return super().get_queryset().filter(owner=self.request.user)
 
 
 class MessageDeleteView(LoginRequiredMixin, DeleteView):
@@ -104,6 +122,17 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
     form_class = MailingForm
     template_name = 'mailing/mailing_form.html'
     success_url = reverse_lazy('mailing:mailing_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user  # Правильный способ передачи
+        return kwargs
+
+
+    def form_valid(self, form):
+        """Автоматически назначаем владельца рассылки"""
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
 
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
@@ -139,10 +168,20 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
 
 class SendAttemptListView(LoginRequiredMixin, ListView):
     '''Список попыток'''
-    model = SendAttempt
+    model = SendAttempt  # Используем правильное имя модели
     template_name = 'mailing/send_attempt_list.html'
     context_object_name = 'send_attempts'
+    paginate_by = 10  # Рекомендую добавить пагинацию
 
+    def get_queryset(self):
+        queryset = super().get_queryset()  # Получаем базовый queryset
+        return queryset.filter(mailing__user=self.request.user)  # Фильтруем по пользователю
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем дополнительный контекст при необходимости
+        context['title'] = 'Мои попытки рассылок'
+        return context
 
 class SendAttemptDetailView(LoginRequiredMixin, DetailView):
     model = SendAttempt

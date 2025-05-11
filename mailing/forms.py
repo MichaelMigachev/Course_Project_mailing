@@ -5,6 +5,7 @@ from django.utils import timezone
 
 from .models import Client, Message, Mailing, SendAttempt
 
+
 class StyleFormMixIn:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -13,6 +14,7 @@ class StyleFormMixIn:
                 field.widget.attrs['class'] = "form-check-input"
             else:
                 field.widget.attrs['class'] = "form-control"
+
 
 class ClientForm(StyleFormMixIn, forms.ModelForm):
     class Meta:
@@ -44,6 +46,7 @@ class ClientForm(StyleFormMixIn, forms.ModelForm):
             raise ValidationError("Комментарий не должен превышать 150 символов.")
         return comment
 
+
 class MessageForm(StyleFormMixIn, forms.ModelForm):
     class Meta:
         model = Message
@@ -65,6 +68,7 @@ class MessageForm(StyleFormMixIn, forms.ModelForm):
             raise ValidationError("Текст письма должен содержать как минимум 10 символов.")
         return letter
 
+
 class MailingForm(StyleFormMixIn, forms.ModelForm):
     class Meta:
         model = Mailing
@@ -85,15 +89,24 @@ class MailingForm(StyleFormMixIn, forms.ModelForm):
                 self.add_error('first_sent_at', "Дата начала не может быть в прошлом.")
 
         # Проверка статуса (например, что выбран допустимый статус)
-        valid_statuses = ['draft', 'scheduled', 'completed']
+        valid_statuses = ['Создана', 'Запущена', 'Завершина']
         if status not in valid_statuses:
             self.add_error('status', 'Недопустимый статус рассылки.')
 
         return cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        # Достаем пользователя перед вызовом родительского __init__
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        # Фильтруем получателей только для текущего пользователя
+        if self.user:
+            self.fields['recipients'].queryset = Client.objects.filter(owner=self.user)
+            self.fields['message'].queryset = Message.objects.filter(owner=self.user)
 
 
 class SendAttemptForm(StyleFormMixIn, forms.ModelForm):
     class Meta:
         model = SendAttempt
         fields = ['status', 'server_response', 'mailing']
-

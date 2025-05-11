@@ -10,6 +10,7 @@
         <tr>
             <th>Тема письма</th>
             <th>Текст</th>
+            <th>Владелец</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
         <tr>
             <td>{{ message.topic }}</td>
             <td>{{ message.letter | truncatechars:30 }}</td>
+            <td>{{ message.owner }}</td>
             <td>
                 <a href="{% url 'mailing:messages_detail' message.pk %}" class="btn btn-success">Посмотреть</a>
                 <a href="{% url 'mailing:messages_update' message.pk %}" class="btn btn-warning">Редактировать</a>

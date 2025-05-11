@@ -10,6 +10,7 @@
         <tr>
             <th>Полное имя</th>
             <th>Email</th>
+            <th>Владелец рассылки</th>
             <th>Действия</th>
         </tr>
     </thead>
@@ -18,6 +19,7 @@
         <tr>
             <td>{{ client.full_name }}</td>
             <td>{{ client.email }}</td>
+            <td>{{ client.owner }}</td>
             <td>
                 <a href="{% url 'mailing:client_detail' client.pk %}" class="btn btn-success">Посмотреть</a>
                 <a href="{% url 'mailing:client_update' client.pk %}" class="btn btn-warning">Редактировать</a>

@@ -13,6 +13,7 @@
                         <li>Дата и время окончания отправки: {{ mailing.end_at }}</li>
                         <li>Статус: {{ mailing.status }}</li>
                         <li>Тема: {{ mailing.message }}</li>
+                        <li>Владелец: {{ mailing.owner }}</li>
                         <li>Получатели:
                             <ul>
                                 {% for recipient in recipients %}
