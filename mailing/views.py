@@ -1,11 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 
 from mailing.forms import ClientForm, MessageForm, MailingForm , SendAttemptForm
 from mailing.models import Client, Message, Mailing, SendAttempt
 
+# mailing/views.py
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from .services import start_mailing
 
 # Главная страница
 class HomeView(TemplateView):
@@ -195,6 +201,20 @@ class SendAttemptCreateView(LoginRequiredMixin, CreateView):
     form_class = SendAttemptForm
     success_url = reverse_lazy('send_attempt_list')
 
+
+@login_required
+@require_POST
+def start_mailing_view(request, mailing_id):
+    if not request.user == Mailing.objects.get(id=mailing_id).owner:
+        return JsonResponse({"success": False, "message": "Нет прав"})
+    success, message = start_mailing(mailing_id)
+
+    if success:
+        messages.success(request, "Рассылка успешно запущена!")  # Сообщение об успехе
+        return redirect('mailing:mailing_list')  # Переадресация
+    else:
+        messages.error(request, message)  # Сообщение об ошибке
+        return redirect('mailing:mailing_detail', mailing_id=mailing_id)  # Вернуться к рассылке
 
 # class SendAttemptUpdateView(LoginRequiredMixin, UpdateView):
 #     model = SendAttempt

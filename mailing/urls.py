@@ -6,6 +6,8 @@ from mailing.views import (HomeView, ClientListView, ClientCreateView, ClientUpd
                            MailingListView, MailingCreateView, MailingUpdateView, MailingDeleteView, MailingDetailView,
                            SendAttemptListView, SendAttemptDetailView, SendAttemptCreateView,
                            )
+from .views import start_mailing_view
+
 
 app_name = MailingConfig.name
 
@@ -36,4 +38,7 @@ urlpatterns = [
     path('send_attempt/create/', SendAttemptCreateView.as_view(), name='send_attempt_create'),
     # path('send_attempt/<int:pk>/update/', SendAttemptUpdateView.as_view(), name='send_attempt_update'),
     # path('send_attempt/<int:pk>/delete/', SendAttemptDeleteView.as_view(), name='send_attempt_delete'),
+
+    #  URLS для кнопки запуска рассылки
+    path('start/<int:mailing_id>/', start_mailing_view, name='start_mailing'),
 ]

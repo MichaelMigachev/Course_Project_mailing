@@ -5,8 +5,8 @@
 {% block content %}
 <section class="py-1 text-center container">
     {% if user.is_authenticated %}
-    <h2>Добро пожаловать {{ user.email }}</h2>
-    <h2>в Mailing App</h2>
+    <h2>Добро пожаловать в Mailing App</h2>
+
     <p>
         <a href="{% url 'mailing:client_list' %}" class="btn btn-primary">Перейти к получателям</a>
         <a href="{% url 'mailing:messages_list' %}" class="btn btn-primary">Перейти к сообщениям</a>

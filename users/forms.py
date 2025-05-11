@@ -35,3 +35,17 @@ class ModeratorForm(UserChangeForm):
 
         self.fields['password'].widget = forms.HiddenInput()
 
+
+class ProfileUpdateForm(StyleFormMixIn, UserCreationForm):
+    class Meta:
+        model = User
+        fields = ('phone_number', 'avatars', 'country')
+
+        def clean_email(self):
+            email = self.cleaned_data.get('email')
+
+            # Проверка уникальности
+            if User.objects.filter(email=email).exists():
+                raise ValidationError("Пользователь с таким email уже существует.")
+
+            return email.lower()  # Приводим к нижнему регистру

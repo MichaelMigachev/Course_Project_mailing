@@ -14,7 +14,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.shortcuts import redirect
 
-from .forms import UserRegisterForm, ModeratorForm
+from .forms import UserRegisterForm, ModeratorForm, ProfileUpdateForm
 
 
 User = get_user_model()
@@ -51,15 +51,30 @@ def email_verification(request, token):
     return redirect('users:login')
 
 # Kласс для обновления профиля пользователя
-class UserUpdateView(PermissionRequiredMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
-    form_class = ModeratorForm
     template_name = 'users/user_form.html'
-    permission_required = ['users.view_user', 'users.set_is_active']
-    success_url = 'users:users_list'
+    permission_required = ['users.view_user']
+
+    def get_form_class(self):
+        # Для модератора - только форма с is_active
+        if self.request.user.has_perm('users.set_is_active'):
+            return ModeratorForm
+        # Для обычного пользователя - форма профиля
+        return ProfileUpdateForm
+
+    # model = User
+    # form_class = ModeratorForm
+    # template_name = 'users/user_form.html'
+    # permission_required = ['users.view_user', 'users.set_is_active']
+    # success_url = 'users:users_list'
 
     def get_success_url(self):
-        return reverse('users:users_list')
+        if self.request.user.has_perm('users.set_is_active'):
+            return reverse('users:users_list')
+            # Для обычного пользователя - форма профиля
+        return reverse('mailing/mailing_list')
+        # return reverse('users:users_list')
 
 
 # Класс для просмотра списка пользователей
@@ -76,3 +91,17 @@ class UsersListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
         context['users_count'] = self.get_queryset().count()
         return context
 
+
+# class ProfileUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+#     """Редактирование профиля """
+#     model = User
+#     form_class = ProfileUpdateForm
+#     template_name = 'users/user_profile_update.html'
+#     success_url = reverse_lazy('mailing/mailing_list')  # Перенаправление после успешного обновления
+#     permission_required = 'users.change_profile, users.view_profile'
+#     def get_object(self, queryset=None):
+#         return self.request.user.profile
+#
+#     def form_valid(self, form):
+#         messages.success(self.request, 'Профиль успешно обновлён!')
+#         return super().form_valid(form)

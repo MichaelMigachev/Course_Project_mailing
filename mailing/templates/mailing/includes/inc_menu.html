@@ -15,6 +15,7 @@
 	                        <button type="submit" class="btn btn-link nav-link"><u>Выйти</u>
 	                        </button>
                      </form>
+                    <li><a href="{% url 'users:profile_update' user.pk %}" class="text-white">Профиль</a></li>
                     <li><a href="{% url 'users:users_list' %}" class="text-white">Список пользователей сервиса</a></li>
                     {% else %}
                     <li><a href="{% url 'users:login' %}" class="text-white">Вход</a></li>
@@ -29,7 +30,7 @@
 <div class="navbar navbar-dark bg-dark shadow-sm">
     <div class="container">
         <a href="/" class="navbar-brand d-flex align-items-center">
-            <strong>ГЛАВНАЯ</strong>
+            <strong>ГЛАВНАЯ </strong>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
                 aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">

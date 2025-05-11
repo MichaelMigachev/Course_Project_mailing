@@ -7,26 +7,34 @@
 <a href="{% url 'mailing:mailing_create' %}" class="btn btn-success">Добавить рассылку</a>
 <table class="table table-striped">
     <thead>
-        <tr>
-            <th>Сообщение</th>
-            <th>Владелец</th>
-            <th>Статус</th>
-            <th>Действия</th>
-        </tr>
+    <tr>
+        <th>ID</th>
+        <th>Сообщение</th>
+        <th>Владелец</th>
+        <th>Статус</th>
+        <th>Действия</th>
+    </tr>
     </thead>
     <tbody>
-        {% for mailing in mailings  %}
-        <tr>
-            <td>{{ mailing.message  }}</td>
-            <td>{{ mailing.owner }}</td>
-            <td>{{ mailing.status }}</td>
-            <td>
-                <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-success">Посмотреть</a>
-                <a href="{% url 'mailing:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
-                <a href="{% url 'mailing:mailing_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
-            </td>
-        </tr>
-        {% endfor %}
+    {% for mailing in mailings %}
+    <tr>
+        <td>{{ mailing.id }}</td>
+        <td>{{ mailing.message }}</td>
+        <td>{{ mailing.owner }}</td>
+        <td>{{ mailing.status }}</td>
+        <td>
+            <a href="{% url 'mailing:mailing_detail' mailing.pk %}" class="btn btn-success">Посмотреть</a>
+            <a href="{% url 'mailing:mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
+            <a href="{% url 'mailing:mailing_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
+             {% if mailing.status == 'Создана' %}
+            <form action="{% url 'mailing:start_mailing' mailing.id %}" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Запустить рассылку</button>
+            </form>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
     </tbody>
 </table>
 {% endblock %}

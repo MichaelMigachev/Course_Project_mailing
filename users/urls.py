@@ -15,5 +15,6 @@ urlpatterns = [
     path('activate/<str:token>/', views.email_verification, name='activate'),
 
     path('list/', UsersListView.as_view(), name='users_list'),
-    path('update/<int:pk>', UserUpdateView.as_view(), name='update')
+    path('update/<int:pk>', UserUpdateView.as_view(), name='update'),
+    path('profile/<int:pk>', UserUpdateView.as_view(), name='profile_update')
 ]
