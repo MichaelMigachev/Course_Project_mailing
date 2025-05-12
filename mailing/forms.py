@@ -89,7 +89,7 @@ class MailingForm(StyleFormMixIn, forms.ModelForm):
                 self.add_error('first_sent_at', "Дата начала не может быть в прошлом.")
 
         # Проверка статуса (например, что выбран допустимый статус)
-        valid_statuses = ['Создана', 'Запущена', 'Завершина']
+        valid_statuses = ['Создана', 'Запущена', 'Завершена']
         if status not in valid_statuses:
             self.add_error('status', 'Недопустимый статус рассылки.')
 

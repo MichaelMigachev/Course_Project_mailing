@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 
 from mailing.forms import ClientForm, MessageForm, MailingForm , SendAttemptForm
@@ -33,19 +33,24 @@ class HomeView(TemplateView):
 
 
 # CRUD для получателей (Client)
-class ClientListView(ListView):
+class ClientListView(LoginRequiredMixin,ListView):
     model = Client
     template_name = 'client_list.html'
     context_object_name = 'clients'
 
+    def get_queryset(self):
+        return Client.objects.filter(owner=self.request.user)
 
-class ClientDetailView(LoginRequiredMixin, DetailView):
+class ClientDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Client
     template_name = 'mailing/client_detail.html'
     context_object_name = 'client'
 
+    def test_func(self):
+        client = self.get_object()
+        return self.request.user == client.owner
 
-class ClientCreateView(LoginRequiredMixin, CreateView):
+class ClientCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Client
     form_class = ClientForm
     # template_name = 'client_form.html'
@@ -55,19 +60,25 @@ class ClientCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user  # Автоматическое назначение владельца
         return super().form_valid(form)
 
-class ClientUpdateView(LoginRequiredMixin, UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Client
     form_class = ClientForm
     template_name = 'mailing/client_form.html'
     success_url = reverse_lazy('mailing:client_list')
 
+    def test_func(self):
+        client = self.get_object()
+        return self.request.user == client.owner
 
-class ClientDeleteView(LoginRequiredMixin, DeleteView):
+class ClientDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Client
     context_object_name = 'client'
     template_name = 'mailing/client_confirm_delete.html'
     success_url = reverse_lazy('mailing:client_list')
 
+    def test_func(self):
+        client = self.get_object()
+        return self.request.user == client.owner
 
 # CRUD для сообщений (Message)
 class MessageListView(LoginRequiredMixin, ListView):
@@ -122,6 +133,8 @@ class MailingListView(LoginRequiredMixin, ListView):
     template_name = 'mailing_list.html'
     context_object_name = 'mailings'
 
+    def get_queryset(self):
+        return Mailing.objects.filter(owner=self.request.user)
 
 class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
@@ -134,28 +147,33 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
         kwargs['user'] = self.request.user  # Правильный способ передачи
         return kwargs
 
-
     def form_valid(self, form):
         """Автоматически назначаем владельца рассылки"""
         form.instance.owner = self.request.user
         return super().form_valid(form)
 
 
-class MailingUpdateView(LoginRequiredMixin, UpdateView):
+class MailingUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
     template_name = 'mailing/mailing_form.html'
     success_url = reverse_lazy('mailing:mailing_list')
 
+    def test_func(self):
+        mailing = self.get_object()
+        return self.request.user == mailing.owner
 
-class MailingDeleteView(LoginRequiredMixin, DeleteView):
+class MailingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Mailing
     template_name = 'mailing/mailing_confirm_delete.html'
     success_url = reverse_lazy('mailing:mailing_list')
     context_object_name = 'mailings'
 
+    def test_func(self):
+        mailing = self.get_object()
+        return self.request.user == mailing.owner
 
-class MailingDetailView(LoginRequiredMixin, DetailView):
+class MailingDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Mailing
     template_name = 'mailing/mailing_detail.html'
     context_object_name = 'mailing'
@@ -169,6 +187,9 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
         context['recipients'] = mailing.recipients.all()
         return context
 
+    def test_func(self):
+        mailing = self.get_object()
+        return self.request.user == mailing.owner
 
 # CRUD для попыток рассылки (SendAttempt)
 
