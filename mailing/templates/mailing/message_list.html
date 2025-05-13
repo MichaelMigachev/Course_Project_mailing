@@ -22,8 +22,11 @@
             <td>{{ message.owner }}</td>
             <td>
                 <a href="{% url 'mailing:messages_detail' message.pk %}" class="btn btn-success">Посмотреть</a>
-                <a href="{% url 'mailing:messages_update' message.pk %}" class="btn btn-warning">Редактировать</a>
+                 {% if request.user == message.owner %}
+    <!-- Кнопки будут видны только владельцу -->
+                <a href="{% url 'mailing:messages_update' message.pk %}" class="btn btn-primary">Редактировать</a>
                 <a href="{% url 'mailing:messages_delete' message.pk %}" class="btn btn-danger">Удалить</a>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}

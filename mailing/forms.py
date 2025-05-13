@@ -110,3 +110,10 @@ class SendAttemptForm(StyleFormMixIn, forms.ModelForm):
     class Meta:
         model = SendAttempt
         fields = ['status', 'server_response', 'mailing']
+
+
+class ModeratorForm(StyleFormMixIn, forms.ModelForm):
+    class Meta:
+        model = Mailing
+        fields = ['is_activated']
+

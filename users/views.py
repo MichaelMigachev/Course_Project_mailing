@@ -57,17 +57,15 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     permission_required = ['users.view_user']
 
     def get_form_class(self):
-        # Для модератора - только форма с is_active
-        if self.request.user.has_perm('users.set_is_active'):
-            return ModeratorForm
-        # Для обычного пользователя - форма профиля
-        return ProfileUpdateForm
+        user = self.request.user
+        editing_self = user == self.get_object()  # Проверяем, редактирует ли пользователь себя
 
-    # model = User
-    # form_class = ModeratorForm
-    # template_name = 'users/user_form.html'
-    # permission_required = ['users.view_user', 'users.set_is_active']
-    # success_url = 'users:users_list'
+        # Если пользователь имеет право set_is_active И НЕ редактирует себя
+        if user.has_perm('users.set_is_active') and not editing_self:
+            return ModeratorForm
+
+        # Если модератор редактирует себя или обычный пользователь
+        return ProfileUpdateForm
 
     def get_success_url(self):
         if self.request.user.has_perm('users.set_is_active'):

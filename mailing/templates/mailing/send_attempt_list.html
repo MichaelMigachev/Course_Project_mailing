@@ -23,9 +23,7 @@
         <td>{{ send_attempt.status }}</td>
         <td>{{ send_attempt.server_response|default:"Нет ответа" }}</td>
         <td>
-            <a href="{% url 'mailing:user_detail' user.pk %}" class="btn btn-success">Посмотреть</a>
-            <a href="{% url 'mailing:user_update' user.pk %}" class="btn btn-warning">Редактировать</a>
-            <a href="{% url 'mailing:user_delete' user.pk %}" class="btn btn-danger">Удалить</a>
+            <a href="#" class="btn btn-success">Повторить</a>
         </td>
     </tr>
     {% empty %}

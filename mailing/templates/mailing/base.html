@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Пример на bootstrap 5: Простой одностраничный шаблон · Версия v5.3.1">
-<!--    <title>Альбом | Album example for Bootstrap · Версия v5.3.1</title>-->
+    <!--    <title>Альбом | Album example for Bootstrap · Версия v5.3.1</title>-->
     <title>{% block title %}Базовый шаблон{% endblock %}</title>
     <link rel="canonical" href="https://bootstrap-4.ru/docs/5.3/examples/album/">
 
@@ -170,7 +170,7 @@
 
 
 <header data-bs-theme="dark">
-{% include 'mailing/includes/inc_menu.html' %}
+    {% include 'mailing/includes/inc_menu.html' %}
 </header>
 
 <main>
@@ -178,13 +178,22 @@
     <section class="py-5 text-center container">
         <div class="row py-lg-1">
             <div class="col-lg-6 col-md-8 mx-auto">
-                <h1 class="fw-light">Cервис управления рассылками {% if user.is_authenticated %}  Пользователь: {{ user.email }} {% endif %}</h1>
+                <h1 class="fw-light">Cервис управления рассылками
+                    {% if user.is_authenticated %}
+                    {% if perms.users.set_is_active %}
+                    Менеджер: {{ user.email }}
+                    {% else %}
+                    Пользователь: {{ user.email }}
+                    {% endif %}
+                    {% endif %}
+                </h1>
                 {% if not user.is_authenticated %}
                 <p class="lead text-body-secondary">Добро пожаловать!</p>
                 <p class="lead text-body-secondary">Для использования сервиса авторизуйтесь или зарегистрируйтесь!</p>
                 <p>
                     <a href="{% url 'users:login' %}" class="btn btn-primary my-2">Войти</a>
                     <a href="{% url 'users:register' %}" class="btn btn-secondary my-2">Зарегистрироваться</a>
+                    <a href="{% url 'users:password_reset' %}" class="btn btn-primary my-2">Забыли пароль?</a>
                 </p>
                 {% endif %}
             </div>

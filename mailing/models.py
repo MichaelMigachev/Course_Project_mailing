@@ -33,7 +33,9 @@ class Message(models.Model):
         verbose_name = 'письмо'
         verbose_name_plural = 'письма'
         ordering = ['topic']
-
+        permissions = [
+                ('view_all_messages', 'Может видеть все сообщения'),
+            ]
 
 # Модель рассылки
 class Mailing(models.Model):
@@ -90,4 +92,5 @@ class SendAttempt(models.Model):
         verbose_name = 'попытка'
         verbose_name_plural = 'попытки'
         ordering = ['status']
+
 

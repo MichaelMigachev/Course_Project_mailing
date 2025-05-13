@@ -6,7 +6,7 @@ from mailing.views import (HomeView, ClientListView, ClientCreateView, ClientUpd
                            MailingListView, MailingCreateView, MailingUpdateView, MailingDeleteView, MailingDetailView,
                            SendAttemptListView, SendAttemptDetailView, SendAttemptCreateView,
                            )
-from .views import start_mailing_view
+from .views import start_mailing_view, mailing_report_view
 
 
 app_name = MailingConfig.name
@@ -41,4 +41,7 @@ urlpatterns = [
 
     #  URLS для кнопки запуска рассылки
     path('start/<int:mailing_id>/', start_mailing_view, name='start_mailing'),
+
+    #  URLS для страници с отчетами
+    path('report/', mailing_report_view, name='report'),
 ]
