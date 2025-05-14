@@ -14,5 +14,5 @@ https://github.com/MichaelMigachev/Course_Project_mailing
 # Использование
 # Откройте скопированный проект.
 # Установите зависимости через: poetry install
-# Запуск django проекта через: Run - "название проекта" или командой python manage.py runserver
+# Запуск django проекта через: poetry run python manage.py runserver 
 # Остановить сервер - CTRL+C
