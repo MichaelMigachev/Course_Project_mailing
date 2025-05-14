@@ -8,66 +8,86 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('topic', models.TextField(help_text='Введите тему', max_length=100, verbose_name='тема')),
-                ('letter', models.TextField(help_text='Введите сообщение', verbose_name='сообщение')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("topic", models.TextField(help_text="Введите тему", max_length=100, verbose_name="тема")),
+                ("letter", models.TextField(help_text="Введите сообщение", verbose_name="сообщение")),
             ],
             options={
-                'verbose_name': 'письмо',
-                'verbose_name_plural': 'письма',
-                'ordering': ['topic'],
+                "verbose_name": "письмо",
+                "verbose_name_plural": "письма",
+                "ordering": ["topic"],
             },
         ),
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_name', models.CharField(help_text='Введите получателя', max_length=100, verbose_name='Ф.И.О.')),
-                ('email', models.EmailField(help_text='Введите Email', max_length=100, unique=True, verbose_name='Email ')),
-                ('comment', models.TextField(help_text='Введите комментарий', max_length=250, verbose_name='комментарий')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("full_name", models.CharField(help_text="Введите получателя", max_length=100, verbose_name="Ф.И.О.")),
+                (
+                    "email",
+                    models.EmailField(help_text="Введите Email", max_length=100, unique=True, verbose_name="Email "),
+                ),
+                (
+                    "comment",
+                    models.TextField(help_text="Введите комментарий", max_length=250, verbose_name="комментарий"),
+                ),
             ],
             options={
-                'verbose_name': 'получатель',
-                'verbose_name_plural': 'получатели',
-                'ordering': ['full_name'],
+                "verbose_name": "получатель",
+                "verbose_name_plural": "получатели",
+                "ordering": ["full_name"],
             },
         ),
         migrations.CreateModel(
-            name='Mailing',
+            name="Mailing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('first_sent_at', models.DateTimeField(blank=True, null=True)),
-                ('end_at', models.DateTimeField(blank=True, null=True)),
-                ('status', models.CharField(choices=[('Создана', 'Создана'), ('Запущена', 'Запущена'), ('Завершена', 'Завершена')], default='Создана', max_length=20)),
-                ('message', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mailing.message')),
-                ('recipients', models.ManyToManyField(to='mailing.user')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("first_sent_at", models.DateTimeField(blank=True, null=True)),
+                ("end_at", models.DateTimeField(blank=True, null=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[("Создана", "Создана"), ("Запущена", "Запущена"), ("Завершена", "Завершена")],
+                        default="Создана",
+                        max_length=20,
+                    ),
+                ),
+                ("message", models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to="mailing.message")),
+                ("recipients", models.ManyToManyField(to="mailing.user")),
             ],
             options={
-                'verbose_name': 'Расссылка',
-                'verbose_name_plural': 'Рассылки',
-                'ordering': ['status'],
+                "verbose_name": "Расссылка",
+                "verbose_name_plural": "Рассылки",
+                "ordering": ["status"],
             },
         ),
         migrations.CreateModel(
-            name='SendAttempt',
+            name="SendAttempt",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('attempt_time', models.DateTimeField(auto_now_add=True)),
-                ('status', models.CharField(choices=[('Успешно', 'Успешно'), ('Не успешно', 'Не успешно')], max_length=20)),
-                ('server_response', models.TextField(blank=True)),
-                ('mailing', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='send_attempts', to='mailing.mailing')),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("attempt_time", models.DateTimeField(auto_now_add=True)),
+                (
+                    "status",
+                    models.CharField(choices=[("Успешно", "Успешно"), ("Не успешно", "Не успешно")], max_length=20),
+                ),
+                ("server_response", models.TextField(blank=True)),
+                (
+                    "mailing",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, related_name="send_attempts", to="mailing.mailing"
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'попытка',
-                'verbose_name_plural': 'попытки',
-                'ordering': ['status'],
+                "verbose_name": "попытка",
+                "verbose_name_plural": "попытки",
+                "ordering": ["status"],
             },
         ),
     ]
