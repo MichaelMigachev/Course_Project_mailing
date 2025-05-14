@@ -1,0 +1,28 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Отчет о попытках{% endblock %}
+
+{% block content %}
+<h2>Отчет о попытках</h2>
+<a href="{% url 'mailing:home' %}" class="btn btn-success">Главна страница</a>
+<table class="table table-striped">
+    <thead>
+    <tr>
+
+        <th>Количество успешных рассылок</th>
+        <th>Количество не успешных рассылок</th>
+        <th>Количество отправленных сообщений</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+        <td>{{ successful_send_attempts }}</td>
+        <td>{{ unsuccessful_send_attempts }}</td>
+        <td>{{ total_send_attempts }}</td>
+
+    </tr>
+
+    </tbody>
+</table>
+{% endblock %}

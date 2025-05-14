@@ -1,0 +1,12 @@
+<!-- mailing/templates/mailing/email_template.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ mailing.subject }}</title>
+</head>
+<body>
+    <h1>{{ mailing.subject }}</h1>
+    <div>{{ mailing.message|safe }}</div>
+    <p>Это письмо отправлено автоматически, пожалуйста, не отвечайте на него.</p>
+</body>
+</html>

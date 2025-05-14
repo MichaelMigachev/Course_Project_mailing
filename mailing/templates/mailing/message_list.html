@@ -1,0 +1,35 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Список сообщений{% endblock %}
+
+{% block content %}
+<h2>Список сообщений</h2>
+<a href="{% url 'mailing:messages_create' %}" class="btn btn-success">Добавить сообщение</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Тема письма</th>
+            <th>Текст</th>
+            <th>Владелец</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for message in messages %}
+        <tr>
+            <td>{{ message.topic }}</td>
+            <td>{{ message.letter | truncatechars:30 }}</td>
+            <td>{{ message.owner }}</td>
+            <td>
+                <a href="{% url 'mailing:messages_detail' message.pk %}" class="btn btn-success">Посмотреть</a>
+                 {% if request.user == message.owner %}
+    <!-- Кнопки будут видны только владельцу -->
+                <a href="{% url 'mailing:messages_update' message.pk %}" class="btn btn-primary">Редактировать</a>
+                <a href="{% url 'mailing:messages_delete' message.pk %}" class="btn btn-danger">Удалить</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
