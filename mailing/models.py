@@ -9,6 +9,7 @@ class Client(models.Model):
     email = models.EmailField(max_length=100, verbose_name="Email ", help_text="Введите Email", unique=True)
     comment = models.TextField(max_length=250, verbose_name="комментарий", help_text="Введите комментарий")
 
+    is_active = models.BooleanField(default=True, verbose_name="активность")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, verbose_name="чей клиент")
 
     def __str__(self):
@@ -18,7 +19,9 @@ class Client(models.Model):
         verbose_name = "получатель"
         verbose_name_plural = "получатели"
         ordering = ["full_name"]
-
+        permissions = [
+            ("can_blocking_client", "Может блокировать получателя"),
+        ]
 
 # Модель письма
 class Message(models.Model):
