@@ -1,0 +1,36 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Список попыток отправки{% endblock %}
+
+{% block content %}
+<h2>Список попыток отправки</h2>
+<a href="{% url 'mailing:send_attempt_create' %}" class="btn btn-success">Создать новую попытку отправки</a>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Время попытки</th>
+        <th>Статус</th>
+        <th>Ответ сервера</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for send_attempt in send_attempts %}
+    <tr>
+        <td>{{ send_attempt.id }}</td>
+        <td>{{ send_attempt.attempt_time }}</td>
+        <td>{{ send_attempt.status }}</td>
+        <td>{{ send_attempt.server_response|default:"Нет ответа" }}</td>
+        <td>
+            <a href="#" class="btn btn-success">Повторить</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Нет попыток отправки.</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

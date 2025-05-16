@@ -1,0 +1,48 @@
+{% extends 'mailing/base.html' %}
+
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+<section class="py-1 text-center container">
+    {% if user.is_authenticated %}
+    <h2>Добро пожаловать в Mailing App</h2>
+
+    <p>
+        <a href="{% url 'mailing:client_list' %}" class="btn btn-primary">Перейти к получателям</a>
+        <a href="{% url 'mailing:messages_list' %}" class="btn btn-primary">Перейти к сообщениям</a>
+        <a href="{% url 'mailing:mailing_list' %}" class="btn btn-primary">Перейти к рассылкам</a>
+        <a href="{% url 'mailing:report' %}" class="btn btn-primary">Отчёт</a>
+    </p>
+    {% else %}
+     <h1>Mailing App</h1>
+    {% endif %}
+</section>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-header">Всего рассылок</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_mailings }}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-header">Активные рассылки</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ active_mailings }}</h5>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-header">Уникальные клиенты</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ unique_clients }}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
